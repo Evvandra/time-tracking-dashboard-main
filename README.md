@@ -34,7 +34,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [Github Repo](https://github.com/Evvandra/time-tracking-dashboard-main)
-- Live Site URL: [Live Site](https://your-live-site-url.com)
+- Live Site URL: [Live Site](https://evvandra.github.io/time-tracking-dashboard-main/))
 
 ## My process
 
