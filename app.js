@@ -1,60 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+const tabs = [...document.querySelectorAll('[role=tab]')];
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+function handleTabClick(e){
+  const panels = [...document.querySelectorAll("[role=tabpanel]")];
+  const panelToControl = e.currentTarget.getAttribute('aria-controls');
+  panels.forEach(p => {
+    p.setAttribute('aria-hidden', `${p.id === panelToControl ? 'false' : 'true'}`)
+  })
+  tabs.forEach(t => {
+    t.setAttribute('aria-selected', `${t === e.currentTarget ? 'true' : 'false'}`)
+  })
+}
 
-  <title>Frontend Mentor | Time tracking dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="./app.js" type="module"></script>
-</head>
-<body>
+function handleKeyDownEvent(e){
+  const actEl = document.activeElement;
+  if(!actEl.classList.contains('tab')){return}
+  switch(e.key){
+    case 'ArrowLeft':
+      e.preventDefault();
+      if(actEl === tabs[0]){
+        return tabs[tabs.length -1].focus();
+      }
+      actEl.previousElementSibling.focus();
+      break;
+    case 'ArrowRight':
+      e.preventDefault();
+      if (actEl === tabs[tabs.length - 1]) {
+        return tabs[0].focus();
+      }
+      actEl.nextElementSibling.focus();
+      break;
+    default:
+      return;
+  }
+}
 
-  <div class="container"> <!--create each panels and also the button(daily, weekly, monthly) -->
-    <div class="card card--avatar">
-      <div class="card--avatar-top card--lg">
-        <img class="avatar" src="./images/image-jeremy.png" alt="Jeremy">
-        <h1>
-          <span>Report for</span><br>
-          Jeremy Robson
-        </h1>
-      </div>
-      <div class="card--avatar-bottom card--sm" role="tablist" aria-label="Time Tracking Cross sections">
-        <button
-          role="tab"
-          aria-selected="true"
-          aria-controls="panel-daily"
-          id="tab-daily"
-          class="btn tab">
-            Daily
-        </button>
-        <button
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-weekly"
-          id="tab-weekly"
-          class="btn tab">
-            Weekly
-        </button>
-        <button
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-monthly"
-          id="tab-monthly"
-          class="btn tab">
-            Monthly
-        </button>
+tabs.forEach(tab => {
+  tab.addEventListener('click', handleTabClick)
+})
 
-      </div>
-    </div>
-    <!-- create the time tracker in daily -->
-  <div id="panel-container" class="panel-container">
-    <div class="container--timecards" role="tabpanel" aria-labelledby="tab-daily" id="panel-daily" aria-hidden="false">
+window.addEventListener('keydown', handleKeyDownEvent);
+
+function getTimeMeasurement(time){
+  switch(time){
+    case "daily":
+      return "Yesterday"
+    case "weekly":
+      return "Last week"
+    case "monthly":
+      return "Last month"
+    default:
+      return;
+  }
+}
+
+function retrieveTimeData(obj, period){
+  return obj.time[period];
+}
+
+function generateCardHTMLString(data){
+  const htmlString = Object.entries(data).map(time => {
+    const timePeriod = time[0];
+    const timeMeasurement = getTimeMeasurement(timePeriod);
+    return `
+      <div class="container--timecards" role="tabpanel" aria-labelledby="tab-${timePeriod}" id="panel-${timePeriod}" aria-hidden="${
+      timePeriod === "daily" ? "false" : "true"
+    }">
       <div class="card timecard timecard-work">
         <div class="card--sm timecard--top">
           <img class="icon" src="./images/icon-work.svg" aria-hidden="true">
@@ -70,10 +80,16 @@
           </div>
           <div class="timecard--amt">
             <p class="current">
-              …hrs
+              ${retrieveTimeData(
+                ...time[1].filter((t) => t.title === "Work"),
+                "current"
+              )}hrs
             </p>
             <p class="previous">
-              Yesterday • …hrs
+              ${timeMeasurement} •  ${retrieveTimeData(
+      ...time[1].filter((t) => t.title === "Work"),
+      "previous"
+    )}hrs
             </p>
           </div>
         </div>
@@ -93,10 +109,16 @@
           </div>
           <div class="timecard--amt">
             <p class="current">
-              …hr
+              ${retrieveTimeData(
+                ...time[1].filter((t) => t.title === "Play"),
+                "current"
+              )}hrs
             </p>
             <p class="previous">
-              Yesterday • …hrs
+              ${timeMeasurement} •  ${retrieveTimeData(
+      ...time[1].filter((t) => t.title === "Play"),
+      "previous"
+    )}hrs
             </p>
           </div>
         </div>
@@ -116,10 +138,16 @@
           </div>
           <div class="timecard--amt">
             <p class="current">
-              …hrs
+              ${retrieveTimeData(
+                ...time[1].filter((t) => t.title === "Study"),
+                "current"
+              )}hrs
             </p>
             <p class="previous">
-              Yesterday • …hr
+              ${timeMeasurement} •  ${retrieveTimeData(
+      ...time[1].filter((t) => t.title === "Study"),
+      "previous"
+    )}hrs
             </p>
           </div>
         </div>
@@ -139,10 +167,16 @@
           </div>
           <div class="timecard--amt">
             <p class="current">
-              …hr
+              ${retrieveTimeData(
+                ...time[1].filter((t) => t.title === "Exercise"),
+                "current"
+              )}hrs
             </p>
             <p class="previous">
-              Yesterday • …hr
+              ${timeMeasurement} •  ${retrieveTimeData(
+      ...time[1].filter((t) => t.title === "Exercise"),
+      "previous"
+    )}hrs
             </p>
           </div>
         </div>
@@ -162,10 +196,16 @@
           </div>
           <div class="timecard--amt">
             <p class="current">
-              …hr
+              ${retrieveTimeData(
+                ...time[1].filter((t) => t.title === "Social"),
+                "current"
+              )}hrs
             </p>
             <p class="previous">
-              Yesterday • …hrs
+              ${timeMeasurement} •  ${retrieveTimeData(
+      ...time[1].filter((t) => t.title === "Social"),
+      "previous"
+    )}hrs
             </p>
           </div>
         </div>
@@ -185,17 +225,54 @@
           </div>
           <div class="timecard--amt">
             <p class="current">
-              …hrs
+              ${retrieveTimeData(
+                ...time[1].filter((t) => t.title === "Self Care"),
+                "current"
+              )}hrs
             </p>
             <p class="previous">
-              Yesterday • …hr
+              ${timeMeasurement} •  ${retrieveTimeData(
+      ...time[1].filter((t) => t.title === "Self Care"),
+      "previous"
+    )}hrs
             </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-  </div>
-</body>
-</html>
+    `;
+  }
+  ).join('')
+
+  return htmlString;
+}
+
+async function fetchLiveData(){
+  const data = await fetch('./data.json');
+  const body = await data.json();
+  const dailyData = body.map(type => (
+    {
+      time: type.timeframes.daily,
+      title: type.title,
+    }
+  ))
+  const weeklyData = body.map(type => (
+    {
+      time: type.timeframes.weekly,
+      title: type.title,
+    }
+  ))
+  const monthlyData = body.map(type => (
+    {
+      time: type.timeframes.monthly,
+      title: type.title,
+    }
+  ))
+  document.querySelector('#panel-container').innerHTML = generateCardHTMLString({
+    daily: dailyData,
+    weekly: weeklyData,
+    monthly: monthlyData,
+  })
+}
+
+fetchLiveData()

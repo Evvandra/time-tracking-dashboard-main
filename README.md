@@ -1,66 +1,112 @@
-# Quiz Challage - Time tracking dashboard
+# Quiz 2 - Time tracking dashboard solution
 
-![Design preview for the News homepage coding challenge](./design/desktop-preview.jpg)
+This is a solution to the [Time tracking dashboard Quiz 2 challenge]
 
-## Welcome! 👋
+## Table of contents
 
-Welcome to Quiz 2 challenge for HCI course, this Quiz only will be opened during your class schedule .
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+- [Author](#author)
 
-**To do this challenge, you need a good understanding of HTML and CSS, and basic JavaScript.**
+**Note: Delete this note and update the table of contents based on what sections you keep.**
 
-## The challenge
+## Overview
 
-Your challenge is to build out this dashboard and get it looking as close to the design as possible.
+### The challenge
 
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
-
-If you would like to practice working with JSON data, we provide a local `data.json` file for the activities. This means you'll be able to pull the data from there instead of using the content in the `.html` file.
-
-Your users should be able to:
+Users should be able to:
 
 - View the optimal layout for the site depending on their device's screen size
 - See hover states for all interactive elements on the page
 - Switch between viewing Daily, Weekly, and Monthly stats
 
-NOTE: 
-Just do the best that you could do in the limited of time, and let see how well you could implement HTML, CSS and Basic JS to build a solution
+### Screenshot
 
-## Where to find everything
+![](./images/screenshot.png)
 
-Your task is to build out the project to the designs inside the `/design` folder. You will find both a mobile and a desktop version of the design. 
+### Links
 
-The designs are in JPG static format. Using JPGs will mean that you'll need to use your best judgment for styles such as `font-size`, `padding` and `margin`. 
+- Solution URL: [Github Repo](https://github.com/Evvandra/time-tracking-dashboard-main)
+- Live Site URL: [Live Site](https://your-live-site-url.com)
 
-All the required assets for this project are in the `/assets` folder. The images are already exported for the correct screen size and optimized.
+## My process
 
-I also include variable and static font files for the required fonts for this project. You can choose to either link to Google Fonts or use the local font files to host the fonts yourself. Note that we've removed the static font files for the font weights that aren't needed for this project.
+### Built with
 
-There is also a `style-guide.md` file containing the information you'll need, such as color palette and fonts.
+- Semantic HTML5 markup
+- CSS custom properties
+- Flexbox
+- CSS Grid
+- [Styled Components](https://styled-components.com/) - For styles
+- JavaScript - for all the panels and buttons
 
-## Building your project
+### What I learned
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
 
-1. Initialize your project as a public repository on [GitHub](https://github.com/). You could just fork this repository to start the process
-2. Configure your repository to publish your code to a web address (I am sure you are familiar already with this step). 
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles, Feel free to use CSS Framework (Bootstrap, etc).
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+To see how you can add code snippets, see below:
 
-## Deploying your project
+```JS
+async function fetchLiveData(){
+  const data = await fetch('./data.json');
+  const body = await data.json();
+  const dailyData = body.map(type => (
+    {
+      time: type.timeframes.daily,
+      title: type.title,
+    }
+  ))
+  const weeklyData = body.map(type => (
+    {
+      time: type.timeframes.weekly,
+      title: type.title,
+    }
+  ))
+  const monthlyData = body.map(type => (
+    {
+      time: type.timeframes.monthly,
+      title: type.title,
+    }
+  ))
+  document.querySelector('#panel-container').innerHTML = generateCardHTMLString({
+    daily: dailyData,
+    weekly: weeklyData,
+    monthly: monthlyData,
+  })
+}
 
-As mentioned above, please hosts your running solution here:
+fetchLiveData()
+```
+```css
+@media screen and (min-width: 1024px) {
+  .container--timecards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+```
 
-- [GitHub Pages](https://pages.github.com/)
+### Continued development
 
-## Create a custom `README.md`
+In the future, I would like to working on my javascript as well with Jquery. since the code is significantly different from the most programming languanges I've learned. In addition, I also want to explore more about HTML and CSS because it would make our website more captivating and interactive.
 
-I strongly recommend overwriting this `README.md` with a custom one. I've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+### Useful resources
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+- [Gap in CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/gap) - This helped me for gap in css. I really liked this pattern and will use it going forward.
+- [Fetch JSON file in JS](https://www.freecodecamp.org/news/how-to-read-json-file-in-javascript/) - This is an amazing article which helped me finally understand fetch. I'd recommend it to anyone still learning this concept.
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+## Your Detail 
+
+- FullName - Evandra Harya Putra
+- StudentID - 2602118433
+- BINUS Email - evandra.putra@binus.ac.id
+
 
 ## Submitting your solution
 

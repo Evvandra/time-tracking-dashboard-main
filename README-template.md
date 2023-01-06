@@ -14,7 +14,6 @@ This is a solution to the [Time tracking dashboard Quiz 2 challenge]
   - [Continued development](#continued-development)
   - [Useful resources](#useful-resources)
 - [Author](#author)
-- [Acknowledgments](#acknowledgments)
 
 **Note: Delete this note and update the table of contents based on what sections you keep.**
 
@@ -30,16 +29,12 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
-
-Add a screenshot of your solution. Crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
-
-**Note: Delete this note and the paragraphs above when you add your screenshot. If you prefer not to add a screenshot, feel free to remove this entire section.**
+![](./images/screenshot.png)
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [Github Repo](https://github.com/Evvandra/time-tracking-dashboard-main)
+- Live Site URL: [Live Site](https://your-live-site-url.com)
 
 ## My process
 
@@ -50,8 +45,7 @@ Add a screenshot of your solution. Crop/optimize/edit your image however you lik
 - Flexbox
 - CSS Grid
 - [Styled Components](https://styled-components.com/) - For styles
-
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
+- JavaScript - for all the panels and buttons
 
 ### What I learned
 
@@ -59,47 +53,56 @@ Use this section to recap over some of your major learnings while working throug
 
 To see how you can add code snippets, see below:
 
-```html
-<h1>Some HTML code I'm proud of</h1>
+```JS
+async function fetchLiveData(){
+  const data = await fetch('./data.json');
+  const body = await data.json();
+  const dailyData = body.map(type => (
+    {
+      time: type.timeframes.daily,
+      title: type.title,
+    }
+  ))
+  const weeklyData = body.map(type => (
+    {
+      time: type.timeframes.weekly,
+      title: type.title,
+    }
+  ))
+  const monthlyData = body.map(type => (
+    {
+      time: type.timeframes.monthly,
+      title: type.title,
+    }
+  ))
+  document.querySelector('#panel-container').innerHTML = generateCardHTMLString({
+    daily: dailyData,
+    weekly: weeklyData,
+    monthly: monthlyData,
+  })
+}
+
+fetchLiveData()
 ```
 ```css
-.proud-of-this-css {
-  color: papayawhip;
+@media screen and (min-width: 1024px) {
+  .container--timecards {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 ```
-```js
-const proudOfThisFunc = () => {
-  console.log('🎉')
-}
-```
-
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
-
-**Note: Delete this note and the content within this section and replace with your own learnings.**
 
 ### Continued development
 
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
-
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
+In the future, I would like to working on my javascript as well with Jquery. since the code is significantly different from the most programming languanges I've learned. In addition, I also want to explore more about HTML and CSS because it would make our website more captivating and interactive.
 
 ### Useful resources
 
-- [Example resource 1](https://www.example.com) - This helped me for XYZ reason. I really liked this pattern and will use it going forward.
-- [Example resource 2](https://www.example.com) - This is an amazing article which helped me finally understand XYZ. I'd recommend it to anyone still learning this concept.
-
-**Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
+- [Gap in CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/gap) - This helped me for gap in css. I really liked this pattern and will use it going forward.
+- [Fetch JSON file in JS](https://www.freecodecamp.org/news/how-to-read-json-file-in-javascript/) - This is an amazing article which helped me finally understand fetch. I'd recommend it to anyone still learning this concept.
 
 ## Your Detail 
 
-- FullName - [Add your name here]
-- StudentID - [Add your StudentID here]
-- BINUS Email - [Add your BINUS email here]
-
-**Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
-
-## Acknowledgments
-
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
+- FullName - Evandra Harya Putra
+- StudentID - 2602118433
+- BINUS Email - evandra.putra@binus.ac.id
